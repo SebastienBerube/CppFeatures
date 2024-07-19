@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <string>
 
 struct DesignatedInitializerTest
 {
@@ -10,11 +11,103 @@ struct DesignatedInitializerTest
     uint32_t z;
 };
 
+void CPP20Test_DesignatedInitializers()
+{
+    DesignatedInitializerTest testStruct{ .x = 1.0, .y = -2, .z = 3 };
+
+
+    std::cout << "C++20 DesignatedInitializers Test\n"
+        << "testStruct= {"
+        << testStruct.x << ","
+        << testStruct.y << ","
+        << testStruct.z << "}";
+
+    std::cout << "\n" << "--------------------" << "\n";
+}
+
+float Add(float a, float b)
+{
+    return a + b;
+}
+
+std::string Add(const std::string& a, const std::string& b)
+{
+    return a + b;
+}
+
+void CPP20Test_TemplatedLambdas()
+{
+    auto f = []<class T>(T a, T b, T c)
+    {
+        return Add(Add(a, b), c);
+    };
+
+    float sumFloat = f(1.0f, 2.0f, 3.0f);
+
+    //std::string sumString = f(std::string("Bonjour"), std::string(" Hi"), std::string(" Montreal"));
+    
+    std::string sumString = f("Bonjour", " Hi", " Montreal");
+
+    std::cout << "C++20 TemplatedLambdas Test\n"
+        << "sumFloat=" << sumFloat << "\n"
+        << "sumString=" << sumString;
+
+    std::cout << "\n" << "--------------------" << "\n";
+}
+
+void CPP20Test_LikelyUnlikelyAttributes()
+{
+    
+    std::cout << "C++20 [[likely]] and [[unlikely]] attributes Test\n";
+
+    int sw = 0;
+    switch (sw)
+    {
+    [[likely]]   case 0: std::cout << "A"; break;
+                 case 1: std::cout << "B"; break;
+    [[unlikely]] case 2: std::cout << "C"; break;
+    }
+
+    if (sw == 0) [[likely]]
+    {
+        std::cout << "likely if";
+    }
+    else [[unlikely]]
+    {
+        std::cout << "unlikely if";
+    }
+
+    std::cout << "\n" << "--------------------" << "\n";
+
+}
+
+void CPP20Test_RangeBasedLoopWithInitializer()
+{
+
+    std::cout << "C++20 RangeBasedLoopWithInitializer Test\n{";
+
+    //Below: Both work
+    //for (auto& v : { 1,2,3,4 })
+    for (auto testArray = { 1,2,3,4 }; auto& v : testArray)
+    {
+        std::cout << v << "; ";
+    }
+
+    std::cout << "}";
+
+    std::cout << "\n" << "--------------------" << "\n";
+}
+
+
 int main()
 {
-    DesignatedInitializerTest str { .x=1.0, .y=-2, .z=3 };
+    CPP20Test_DesignatedInitializers();
 
-    std::cout << "Hello World!\n";
+    CPP20Test_TemplatedLambdas();
+
+    CPP20Test_RangeBasedLoopWithInitializer();
+
+    CPP20Test_LikelyUnlikelyAttributes();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
